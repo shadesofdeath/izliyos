@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LIVE TV — Canlı Yayın</title>
+<meta name="description" content="iptv-org verileriyle ülkelere göre canlı TV kanalları. Ara, keşfet, izle.">
+<link rel="preconnect" href="https://iptv-org.github.io">
+<style>
+  /* ============================================================
+     Design tokens — Apple-clean broadcast tuner.
+     Boldness is spent on the LIVE indicator + the theater player;
+     everything else stays quiet and disciplined.
+     ============================================================ */
+  :root{
+    --bg:#fbfbfd;
+    --bg-elev:#ffffff;
+    --bg-sunken:#f2f2f5;
+    --text:#1d1d1f;
+    --text-dim:#6e6e73;
+    --text-faint:#a1a1a6;
+    --hair:rgba(0,0,0,.09);
+    --hair-strong:rgba(0,0,0,.14);
+    --accent:#0071e3;
+    --accent-soft:rgba(0,113,227,.10);
+    --live:#ff3b30;
+    --warn:#b25000;
+    --warn-soft:rgba(255,149,0,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 30px rgba(0,0,0,.06);
+    --shadow-lg:0 10px 40px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.12);
+    --radius:16px;
+    --radius-sm:11px;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --maxw:1180px;
+  }
+  [data-theme="dark"]{
+    --bg:#0a0a0c;
+    --bg-elev:#16161a;
+    --bg-sunken:#1d1d22;
+    --text:#f5f5f7;
+    --text-dim:#a1a1a6;
+    --text-faint:#6e6e73;
+    --hair:rgba(255,255,255,.10);
+    --hair-strong:rgba(255,255,255,.16);
+    --accent:#2997ff;
+    --accent-soft:rgba(41,151,255,.14);
+    --live:#ff453a;
+    --warn:#ffb340;
+    --warn-soft:rgba(255,159,10,.16);
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 34px rgba(0,0,0,.5);
+    --shadow-lg:0 18px 60px rgba(0,0,0,.7),0 4px 12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:var(--sans);line-height:1.45;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    transition:background .35s ease,color .35s ease;
+  }
+  button{font-family:inherit;cursor:pointer;color:inherit}
+  ::selection{background:var(--accent-soft)}
+  a{color:var(--accent);text-decoration:none}
+
+  /* ---------- App bar ---------- */
+  .bar{
+    position:sticky;top:0;z-index:40;
+    background:color-mix(in srgb,var(--bg) 78%,transparent);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--hair);
+  }
+  .bar-in{
+    max-width:var(--maxw);margin:0 auto;padding:11px 20px;
+    display:flex;align-items:center;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;user-select:none}
+  .brand svg{display:block;color:var(--text)}
+  .brand .word{font-weight:700;letter-spacing:-.02em;font-size:17px}
+  .live-dot{
+    width:8px;height:8px;border-radius:50%;background:var(--live);
+    box-shadow:0 0 0 0 var(--live);animation:pulse 2.2s infinite;flex-shrink:0;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--live) 60%,transparent)}
+    70%{box-shadow:0 0 0 7px transparent}
+    100%{box-shadow:0 0 0 0 transparent}
+  }
+  .bar-spacer{flex:1}
+
+  .search{
+    position:relative;flex:1;max-width:380px;min-width:0;
+  }
+  .search input{
+    width:100%;border:1px solid var(--hair-strong);background:var(--bg-elev);
+    color:var(--text);border-radius:980px;padding:9px 14px 9px 38px;font-size:14.5px;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+  }
+  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-faint);pointer-events:none}
+
+  .icon-btn{
+    width:38px;height:38px;display:grid;place-items:center;flex-shrink:0;
+    border:1px solid var(--hair-strong);background:var(--bg-elev);border-radius:11px;
+    transition:background .18s,border-color .18s,transform .1s;
+  }
+  .icon-btn:hover{background:var(--bg-sunken)}
+  .icon-btn:active{transform:scale(.94)}
+  .lang-btn{width:auto;padding:0 12px;font-weight:600;font-size:13px;font-family:var(--mono);letter-spacing:.02em}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:24px 20px 96px}
+
+  .crumbs{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;min-height:34px}
+  .crumb-btn{
+    display:inline-flex;align-items:center;gap:6px;border:1px solid var(--hair);
+    background:var(--bg-elev);border-radius:980px;padding:6px 13px 6px 11px;font-size:13.5px;
+    font-weight:550;transition:background .18s,border-color .18s;
+  }
+  .crumb-btn:hover{background:var(--bg-sunken);border-color:var(--hair-strong)}
+  .crumb-here{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
+  .crumb-here .flag{font-size:20px}
+  .crumb-sep{color:var(--text-faint)}
+
+  .hero{margin-bottom:22px}
+  .hero h1{
+    font-size:clamp(26px,4.5vw,40px);line-height:1.05;letter-spacing:-.025em;
+    margin:0 0 8px;font-weight:700;
+  }
+  .hero p{margin:0;color:var(--text-dim);font-size:15.5px;max-width:60ch}
+  .stat-row{display:flex;gap:22px;margin-top:16px;flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column;line-height:1.1}
+  .stat b{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;font-family:var(--mono);letter-spacing:-.02em}
+  .stat span{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+
+  /* ---------- Filter chips (categories) ---------- */
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 14px;margin-bottom:6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex-shrink:0;border:1px solid var(--hair-strong);background:var(--bg-elev);
+    border-radius:980px;padding:7px 14px;font-size:13px;font-weight:550;white-space:nowrap;
+    transition:all .16s;color:var(--text-dim);
+  }
+  .chip:hover{background:var(--bg-sunken);color:var(--text)}
+  .chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+  /* ---------- Country grid ---------- */
+  .country-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;
+  }
+  .country-card{
+    display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;
+    border:1px solid var(--hair);background:var(--bg-elev);border-radius:var(--radius);
+    padding:16px 16px 14px;transition:transform .14s ease,box-shadow .2s,border-color .2s;
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .country-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--hair-strong)}
+  .country-card:active{transform:translateY(-1px)}
+  .country-card .flag{font-size:34px;line-height:1;margin-bottom:9px;filter:saturate(1.05)}
+  .country-card .c-name{font-weight:600;font-size:15px;letter-spacing:-.01em}
+  .country-card .c-count{font-size:12.5px;color:var(--text-dim);font-family:var(--mono)}
+  .country-card .c-code{
+    position:absolute;top:13px;right:14px;font-family:var(--mono);font-size:11px;
+    color:var(--text-faint);letter-spacing:.05em;font-weight:600;
+  }
+
+  /* ---------- Channel grid ---------- */
+  .ch-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px;
+  }
+  .ch-card{
+    display:flex;align-items:center;gap:13px;text-align:left;width:100%;
+    border:1px solid var(--hair);background:var(--bg-elev);border-radius:var(--radius-sm);
+    padding:12px;transition:transform .14s,box-shadow .2s,border-color .2s;box-shadow:var(--shadow);
+    position:relative;
+  }
+  .ch-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--hair-strong)}
+  .ch-card:active{transform:translateY(0)}
+  .ch-logo{
+    width:52px;height:52px;border-radius:12px;flex-shrink:0;overflow:hidden;
+    display:grid;place-items:center;background:var(--bg-sunken);border:1px solid var(--hair);
+  }
+  .ch-logo img{width:100%;height:100%;object-fit:contain;padding:5px}
+  .ch-logo .initials{font-family:var(--mono);font-weight:700;font-size:17px;color:#fff;letter-spacing:-.03em}
+  .ch-info{min-width:0;flex:1}
+  .ch-name{font-weight:600;font-size:14.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ch-sub{display:flex;align-items:center;gap:7px;margin-top:3px;flex-wrap:wrap}
+  .badge{
+    font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.02em;
+    padding:2px 6px;border-radius:6px;background:var(--bg-sunken);color:var(--text-dim);
+    border:1px solid var(--hair);text-transform:uppercase;
+  }
+  .badge.cat{text-transform:capitalize;font-family:var(--sans);letter-spacing:0;font-weight:550}
+  .badge.warnb{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+  .ch-live{
+    position:absolute;top:11px;right:12px;display:flex;align-items:center;gap:5px;
+    font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--live);
+  }
+
+  .more-btn{
+    display:block;margin:22px auto 0;border:1px solid var(--hair-strong);background:var(--bg-elev);
+    border-radius:980px;padding:11px 26px;font-size:14px;font-weight:600;transition:background .18s;
+  }
+  .more-btn:hover{background:var(--bg-sunken)}
+
+  /* ---------- States ---------- */
+  .state{text-align:center;padding:72px 20px;color:var(--text-dim)}
+  .state .ring{
+    width:34px;height:34px;border:3px solid var(--hair-strong);border-top-color:var(--accent);
+    border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .state h3{color:var(--text);font-size:18px;margin:0 0 6px;font-weight:650}
+  .state p{margin:0 auto;max-width:42ch;font-size:14.5px}
+  .state .prog{font-family:var(--mono);font-size:12.5px;color:var(--text-faint);margin-top:14px}
+
+  /* ---------- Player (theater) ---------- */
+  .scrim{
+    position:fixed;inset:0;z-index:60;display:none;
+    background:rgba(0,0,0,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    padding:20px;overflow-y:auto;
+  }
+  .scrim.open{display:flex;align-items:center;justify-content:center}
+  .player{
+    width:100%;max-width:920px;background:var(--bg-elev);border:1px solid var(--hair);
+    border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;
+    animation:rise .28s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+  .video-wrap{position:relative;background:#000;aspect-ratio:16/9;width:100%}
+  .video-wrap video{width:100%;height:100%;display:block;background:#000}
+  .v-overlay{
+    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:12px;text-align:center;padding:24px;color:#fff;background:rgba(0,0,0,.55);
+  }
+  .v-overlay.show{display:flex}
+  .v-overlay .ring{width:30px;height:30px;border:3px solid rgba(255,255,255,.25);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
+  .v-overlay h4{margin:0;font-size:16px;font-weight:650}
+  .v-overlay p{margin:0;font-size:13.5px;color:rgba(255,255,255,.8);max-width:38ch}
+  .v-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+  .v-actions button{
+    border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;
+    border-radius:980px;padding:8px 16px;font-size:13px;font-weight:600;transition:background .16s;
+  }
+  .v-actions button:hover{background:rgba(255,255,255,.2)}
+  .v-actions button.primary{background:#fff;color:#000;border-color:#fff}
+
+  .p-head{display:flex;align-items:center;gap:13px;padding:15px 18px 5px}
+  .p-logo{width:46px;height:46px;border-radius:11px;flex-shrink:0;overflow:hidden;display:grid;place-items:center;background:var(--bg-sunken);border:1px solid var(--hair)}
+  .p-logo img{width:100%;height:100%;object-fit:contain;padding:5px}
+  .p-logo .initials{font-family:var(--mono);font-weight:700;font-size:16px;color:#fff}
+  .p-title{flex:1;min-width:0}
+  .p-title h2{margin:0;font-size:18px;font-weight:680;letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-title .p-meta{font-size:13px;color:var(--text-dim);margin-top:2px}
+  .p-close{width:34px;height:34px;border-radius:50%;border:none;background:var(--bg-sunken);display:grid;place-items:center;flex-shrink:0;transition:background .16s}
+  .p-close:hover{background:var(--hair-strong)}
+
+  .sources{padding:12px 18px 18px}
+  .sources-label{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);font-weight:650;margin-bottom:9px}
+  .src-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+  .src-chip{
+    flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+    border:1px solid var(--hair-strong);background:var(--bg);border-radius:11px;padding:9px 13px;
+    transition:all .16s;min-width:96px;
+  }
+  .src-chip:hover{border-color:var(--accent)}
+  .src-chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+  .src-chip .q{font-family:var(--mono);font-weight:700;font-size:13px}
+  .src-chip .l{font-size:11px;color:var(--text-dim)}
+
+  footer{
+    border-top:1px solid var(--hair);max-width:var(--maxw);margin:0 auto;
+    padding:26px 20px 40px;color:var(--text-faint);font-size:12.5px;line-height:1.6;
+  }
+  footer a{color:var(--text-dim)}
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--text);color:var(--bg);padding:11px 20px;border-radius:980px;font-size:13.5px;
+    font-weight:600;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .26s;z-index:80;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .hidden{display:none!important}
+
+  @media (max-width:560px){
+    .wrap{padding:18px 14px 90px}
+    .bar-in{padding:10px 14px;gap:10px}
+    .brand .word{display:none}
+    .hero h1{font-size:27px}
+    .stat-row{gap:16px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  }
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ===================== App bar ===================== -->
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand" title="LIVE TV">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2.5"/><path d="M17 2l-5 5-5-5"/>
+      </svg>
+      <span class="live-dot"></span>
+      <span class="word">LIVE TV</span>
+    </div>
+
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="search" autocomplete="off" spellcheck="false" data-ph="searchPlaceholder" placeholder="Kanal ara…">
+    </div>
+
+    <div class="bar-spacer"></div>
+
+    <button class="icon-btn lang-btn" id="langBtn" title="Language">TR</button>
+    <button class="icon-btn" id="themeBtn" title="Tema" aria-label="Tema">
+      <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg id="moonIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== Main ===================== -->
+<main class="wrap">
+  <!-- Breadcrumbs -->
+  <nav class="crumbs" id="crumbs"></nav>
+
+  <!-- Hero / heading -->
+  <div class="hero" id="hero"></div>
+
+  <!-- Category chips (channel view only) -->
+  <div class="chips hidden" id="chips"></div>
+
+  <!-- Content -->
+  <div id="content">
+    <div class="state">
+      <div class="ring"></div>
+      <h3 data-i18n="loadingTitle">Yayın verileri yükleniyor</h3>
+      <p data-i18n="loadingDesc">iptv-org üzerinden ülkeler, kanallar ve yayın bağlantıları alınıyor.</p>
+      <div class="prog" id="prog"></div>
+    </div>
+  </div>
+</main>
+
+<footer id="footer"></footer>
+
+<!-- ===================== Player ===================== -->
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Player">
+  <div class="player">
+    <div class="video-wrap">
+      <video id="video" playsinline controls></video>
+      <div class="v-overlay" id="vOverlay">
+        <div id="vSpin" class="ring"></div>
+        <h4 id="vTitle"></h4>
+        <p id="vDesc"></p>
+        <div class="v-actions" id="vActions"></div>
+      </div>
+    </div>
+    <div class="p-head">
+      <div class="p-logo" id="pLogo"></div>
+      <div class="p-title">
+        <h2 id="pName"></h2>
+        <div class="p-meta" id="pMeta"></div>
+      </div>
+      <button class="p-close" id="pClose" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sources" id="sources"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<script>
+"use strict";
+
+/* ============================================================
+   Config + i18n
+   ============================================================ */
+const API = "https://iptv-org.github.io/api";
+const RENDER_LIMIT = 200;          // channels rendered before "load more"
+const SHOW_NSFW = false;           // family-safe by default
+
+const I18N = {
+  tr:{
+    searchPlaceholder:"Kanal ara…",
+    loadingTitle:"Yayın verileri yükleniyor",
+    loadingDesc:"iptv-org üzerinden ülkeler, kanallar ve yayın bağlantıları alınıyor.",
+    heroTitle:"Dünyanın canlı TV’si, tek yerde",
+    heroDesc:"iptv-org açık verisiyle ülkelere göre binlerce canlı kanal. Bir ülke seçin, arayın ve tarayıcıda izleyin.",
+    statCountries:"Ülke", statChannels:"Kanal", statStreams:"Yayın",
+    allCountries:"Ülkeler", searchCountryPh:"Ülke ara…",
+    chCount:n=>`${n} kanal`,
+    backCountries:"Ülkeler",
+    allCats:"Tümü",
+    channelsIn:c=>`${c}`,
+    chSubtitle:n=>`${n} kanal · canlı yayın`,
+    noCountriesTitle:"Sonuç yok",
+    noCountriesDesc:"Bu aramayla eşleşen ülke bulunamadı.",
+    noChTitle:"Kanal bulunamadı",
+    noChDesc:"Arama veya kategori filtresini değiştirip tekrar deneyin.",
+    loadMore:"Daha fazla göster",
+    live:"CANLI",
+    sources:"Yayın kaynağı",
+    geoBlocked:"Coğrafi engel",
+    loadingStream:"Yayın açılıyor…",
+    errTitle:"Bu yayın oynatılamadı",
+    errDesc:"Kaynak CORS, coğrafi engel ya da özel başlık gerektiriyor olabilir. Başka bir kaynağı deneyin veya bağlantıyı bir oynatıcıda açın.",
+    httpDesc:"Bu kaynak güvensiz (http) bağlantı kullanıyor ve https üzerinde tarayıcı tarafından engellenebilir. Bağlantıyı kopyalayıp VLC gibi bir oynatıcıda açabilirsiniz.",
+    retry:"Tekrar dene", nextSrc:"Sonraki kaynak", copyLink:"Bağlantıyı kopyala",
+    copied:"Bağlantı kopyalandı", noStream:"Yayın yok",
+    footer:`Veriler <a href="https://github.com/iptv-org/iptv" target="_blank" rel="noopener">iptv-org</a> açık kaynak projesinden alınır ve sürekli güncellenir. Bu site yalnızca genel erişime açık yayın bağlantılarını listeler; içerikleri barındırmaz. Bazı yayınlar CORS, coğrafi kısıtlama veya özel başlık gereksinimleri nedeniyle tarayıcıda açılmayabilir.`
+  },
+  en:{
+    searchPlaceholder:"Search channels…",
+    loadingTitle:"Loading broadcast data",
+    loadingDesc:"Fetching countries, channels and stream links from iptv-org.",
+    heroTitle:"The world’s live TV, in one place",
+    heroDesc:"Thousands of live channels by country, powered by the open iptv-org dataset. Pick a country, search, and watch right in your browser.",
+    statCountries:"Countries", statChannels:"Channels", statStreams:"Streams",
+    allCountries:"Countries", searchCountryPh:"Search country…",
+    chCount:n=>`${n} channels`,
+    backCountries:"Countries",
+    allCats:"All",
+    channelsIn:c=>`${c}`,
+    chSubtitle:n=>`${n} channels · live`,
+    noCountriesTitle:"No results",
+    noCountriesDesc:"No country matches that search.",
+    noChTitle:"No channels found",
+    noChDesc:"Try changing the search or category filter.",
+    loadMore:"Show more",
+    live:"LIVE",
+    sources:"Source",
+    geoBlocked:"Geo-blocked",
+    loadingStream:"Starting stream…",
+    errTitle:"This stream couldn’t play",
+    errDesc:"The source may require CORS, be geo-restricted, or need custom headers. Try another source or open the link in a player.",
+    httpDesc:"This source uses an insecure (http) link and may be blocked by the browser on https. Copy the link and open it in a player like VLC.",
+    retry:"Retry", nextSrc:"Next source", copyLink:"Copy link",
+    copied:"Link copied", noStream:"No stream",
+    footer:`Data comes from the open-source <a href="https://github.com/iptv-org/iptv" target="_blank" rel="noopener">iptv-org</a> project and is continuously updated. This site only lists publicly available stream links; it hosts no content. Some streams may not open in the browser due to CORS, geo-restrictions or custom header requirements.`
+  }
+};
+
+/* ============================================================
+   State
+   ============================================================ */
+const S = {
+  lang: localStorage.getItem("lang") || (navigator.language||"").startsWith("tr") ? "tr" : "en",
+  theme: localStorage.getItem("theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light"),
+  countries:{},            // code -> {name,code,flag}
+  channels:{},             // id -> channel
+  streamsByCh:{},          // id -> [streams]
+  logoByCh:{},             // id -> url
+  byCountry:{},            // code -> [channelId]
+  catsByCountry:{},        // code -> Set(cat)
+  view:"countries",        // "countries" | "channels"
+  country:null,            // current country code
+  cat:"all",
+  q:"",
+  renderCount:RENDER_LIMIT
+};
+// fix ternary precedence
+S.lang = localStorage.getItem("lang") || ((navigator.language||"").toLowerCase().startsWith("tr") ? "tr":"en");
+
+const t = k => I18N[S.lang][k];
+
+/* ============================================================
+   Boot
+   ============================================================ */
+const $ = s => document.querySelector(s);
+applyTheme(); applyLangStatic();
+
+$("#themeBtn").addEventListener("click", ()=>{ S.theme = S.theme==="dark"?"light":"dark"; localStorage.setItem("theme",S.theme); applyTheme(); });
+$("#langBtn").addEventListener("click", ()=>{ S.lang = S.lang==="tr"?"en":"tr"; localStorage.setItem("lang",S.lang); applyLangStatic(); rerender(); });
+$("#search").addEventListener("input", debounce(e=>{ S.q = e.target.value.trim().toLowerCase(); S.renderCount=RENDER_LIMIT; render(); },180));
+$("#pClose").addEventListener("click", closePlayer);
+$("#scrim").addEventListener("click", e=>{ if(e.target===$("#scrim")) closePlayer(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#scrim").classList.contains("open")) closePlayer(); });
+
+loadData();
+
+/* ============================================================
+   Theme + language
+   ============================================================ */
+function applyTheme(){
+  document.documentElement.setAttribute("data-theme", S.theme);
+  $("#sunIcon").classList.toggle("hidden", S.theme==="dark");
+  $("#moonIcon").classList.toggle("hidden", S.theme!=="dark");
+}
+function applyLangStatic(){
+  document.documentElement.lang = S.lang;
+  $("#langBtn").textContent = S.lang.toUpperCase();
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-ph]").forEach(el=>{ el.placeholder = t(el.dataset.ph); });
+  $("#footer").innerHTML = t("footer");
+}
+
+/* ============================================================
+   Data loading
+   ============================================================ */
+async function loadData(){
+  const prog = $("#prog");
+  const set = m => prog.textContent = m;
+  try{
+    set("countries.json · channels.json · streams.json");
+    const [countries, channels, streams] = await Promise.all([
+      fetchJSON(`${API}/countries.json`),
+      fetchJSON(`${API}/channels.json`),
+      fetchJSON(`${API}/streams.json`)
+    ]);
+
+    // index countries
+    countries.forEach(c => S.countries[c.code] = c);
+
+    // index channels
+    channels.forEach(ch=>{
+      if(!SHOW_NSFW && ch.is_nsfw) return;
+      if(ch.closed) return;                 // skip defunct channels
+      S.channels[ch.id] = ch;
+    });
+
+    // index streams (only those bound to a channel we kept)
+    streams.forEach(st=>{
+      if(!st.channel || !S.channels[st.channel]) return;
+      (S.streamsByCh[st.channel] ||= []).push(st);
+    });
+
+    // build per-country buckets (only channels that actually have a stream)
+    for(const id in S.streamsByCh){
+      const ch = S.channels[id];
+      let code = ch.country && S.countries[ch.country] ? ch.country : "_INT";
+      (S.byCountry[code] ||= []).push(id);
+      const set2 = (S.catsByCountry[code] ||= new Set());
+      (ch.categories||[]).forEach(c=>set2.add(c));
+    }
+    // synthetic "international/other" bucket
+    if(S.byCountry._INT){
+      S.countries._INT = { code:"_INT", name:(S.lang==="tr"?"Uluslararası":"International"), flag:"🌐" };
+    }
+
+    // sort each country's channels alphabetically
+    for(const code in S.byCountry){
+      S.byCountry[code].sort((a,b)=> S.channels[a].name.localeCompare(S.channels[b].name));
+    }
+
+    S.view="countries"; render();
+
+    // logos enhance the UI but shouldn't block it — load after first paint
+    set("logos.json");
+    fetchJSON(`${API}/logos.json`).then(logos=>{
+      logos.forEach(l=>{
+        if(!l.url) return;
+        const cur = S.logoByCh[l.channel];
+        // prefer an "in_use" logo; otherwise keep the first seen
+        if(!cur || l.in_use) S.logoByCh[l.channel] = l.url;
+      });
+      rerender();
+    }).catch(()=>{});
+
+  }catch(err){
+    $("#content").innerHTML =
+      `<div class="state"><h3>${S.lang==="tr"?"Veriler yüklenemedi":"Couldn’t load data"}</h3>
+       <p>${S.lang==="tr"?"İnternet bağlantınızı kontrol edip sayfayı yenileyin.":"Check your connection and refresh the page."}</p>
+       <p class="prog">${escapeHtml(String(err.message||err))}</p></div>`;
+  }
+}
+async function fetchJSON(url){
+  const r = await fetch(url, {cache:"force-cache"});
+  if(!r.ok) throw new Error(`${url.split("/").pop()} → HTTP ${r.status}`);
+  return r.json();
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+function rerender(){ render(); }
+function render(){
+  if(S.view==="countries") renderCountries();
+  else renderChannels();
+}
+
+function renderCountries(){
+  $("#chips").classList.add("hidden");
+  // crumbs
+  $("#crumbs").innerHTML = `<span class="crumb-here">🌍 ${t("allCountries")}</span>`;
+  // hero + stats
+  const totalCh = Object.keys(S.streamsByCh).length;
+  const totalStr = Object.values(S.streamsByCh).reduce((a,b)=>a+b.length,0);
+  const countryCodes = Object.keys(S.byCountry);
+  $("#hero").innerHTML = `
+    <h1>${t("heroTitle")}</h1>
+    <p>${t("heroDesc")}</p>
+    <div class="stat-row">
+      <div class="stat"><b>${countryCodes.length}</b><span>${t("statCountries")}</span></div>
+      <div class="stat"><b>${fmt(totalCh)}</b><span>${t("statChannels")}</span></div>
+      <div class="stat"><b>${fmt(totalStr)}</b><span>${t("statStreams")}</span></div>
+    </div>`;
+
+  // search across countries by name/code
+  const q = S.q;
+  let codes = countryCodes
+    .map(code=>({code, c:S.countries[code], n:S.byCountry[code].length}))
+    .filter(x=>x.c);
+  if(q) codes = codes.filter(x => x.c.name.toLowerCase().includes(q) || x.code.toLowerCase().includes(q));
+  // sort by channel count desc, then name
+  codes.sort((a,b)=> b.n - a.n || a.c.name.localeCompare(b.c.name));
+
+  if(!codes.length){
+    $("#content").innerHTML = stateEmpty(t("noCountriesTitle"), t("noCountriesDesc"));
+    return;
+  }
+  const cards = codes.map(({code,c,n})=>`
+    <button class="country-card" data-code="${escapeHtml(code)}">
+      <span class="c-code">${escapeHtml(code==="_INT"?"INT":code)}</span>
+      <span class="flag">${c.flag||"🌐"}</span>
+      <span class="c-name">${escapeHtml(c.name)}</span>
+      <span class="c-count">${t("chCount")(n)}</span>
+    </button>`).join("");
+  $("#content").innerHTML = `<div class="country-grid">${cards}</div>`;
+  $("#content").querySelectorAll(".country-card").forEach(b=>
+    b.addEventListener("click", ()=> enterCountry(b.dataset.code)));
+}
+
+function enterCountry(code){
+  S.country = code; S.view="channels"; S.cat="all"; S.q=""; S.renderCount=RENDER_LIMIT;
+  $("#search").value=""; $("#search").placeholder=t("searchPlaceholder");
+  window.scrollTo({top:0});
+  render();
+}
+function backToCountries(){
+  S.view="countries"; S.country=null; S.q=""; S.renderCount=RENDER_LIMIT;
+  $("#search").value="";
+  window.scrollTo({top:0});
+  render();
+}
+
+function renderChannels(){
+  const code = S.country;
+  const c = S.countries[code];
+  const all = S.byCountry[code] || [];
+
+  // crumbs
+  $("#crumbs").innerHTML = `
+    <button class="crumb-btn" id="backBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      ${t("backCountries")}
+    </button>
+    <span class="crumb-sep">/</span>
+    <span class="crumb-here"><span class="flag">${c.flag||"🌐"}</span>${escapeHtml(c.name)}</span>`;
+  $("#backBtn").addEventListener("click", backToCountries);
+
+  // hero
+  $("#hero").innerHTML = `<h1>${escapeHtml(c.name)}</h1><p>${t("chSubtitle")(all.length)}</p>`;
+
+  // category chips
+  const cats = ["all", ...[...(S.catsByCountry[code]||[])].sort()];
+  const chipsEl = $("#chips"); chipsEl.classList.remove("hidden");
+  chipsEl.innerHTML = cats.map(cat=>`
+    <button class="chip" data-cat="${escapeHtml(cat)}" aria-pressed="${S.cat===cat}">
+      ${cat==="all"?t("allCats"):cap(cat)}
+    </button>`).join("");
+  chipsEl.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+    S.cat=b.dataset.cat; S.renderCount=RENDER_LIMIT; render();
+  }));
+
+  // filter
+  const q = S.q;
+  let list = all.filter(id=>{
+    const ch = S.channels[id];
+    if(S.cat!=="all" && !(ch.categories||[]).includes(S.cat)) return false;
+    if(q){
+      if(ch.name.toLowerCase().includes(q)) return true;
+      return (ch.alt_names||[]).some(n=>n.toLowerCase().includes(q));
+    }
+    return true;
+  });
+
+  if(!list.length){
+    $("#content").innerHTML = stateEmpty(t("noChTitle"), t("noChDesc"));
+    return;
+  }
+
+  const shown = list.slice(0, S.renderCount);
+  const cards = shown.map(id=>channelCard(id)).join("");
+  let html = `<div class="ch-grid">${cards}</div>`;
+  if(list.length > S.renderCount){
+    html += `<button class="more-btn" id="moreBtn">${t("loadMore")} · ${list.length - S.renderCount}</button>`;
+  }
+  $("#content").innerHTML = html;
+  $("#content").querySelectorAll(".ch-card").forEach(b=>
+    b.addEventListener("click", ()=> openPlayer(b.dataset.id)));
+  const more = $("#moreBtn");
+  if(more) more.addEventListener("click", ()=>{ S.renderCount += RENDER_LIMIT; render(); });
+}
+
+function channelCard(id){
+  const ch = S.channels[id];
+  const streams = S.streamsByCh[id] || [];
+  const best = bestStream(streams);
+  const cat = (ch.categories&&ch.categories[0])||"";
+  const geo = streams.some(s=>s.label);
+  return `
+    <button class="ch-card" data-id="${escapeHtml(id)}">
+      <span class="ch-live">● ${t("live")}</span>
+      <div class="ch-logo">${logoHTML(id, ch.name, 17)}</div>
+      <div class="ch-info">
+        <div class="ch-name">${escapeHtml(ch.name)}</div>
+        <div class="ch-sub">
+          ${best&&best.quality?`<span class="badge">${escapeHtml(best.quality)}</span>`:""}
+          ${cat?`<span class="badge cat">${cap(cat)}</span>`:""}
+          ${geo?`<span class="badge warnb">${t("geoBlocked")}</span>`:""}
+        </div>
+      </div>
+    </button>`;
+}
+
+function logoHTML(id, name, size){
+  const url = S.logoByCh[id];
+  if(url) return `<img src="${escapeHtml(url)}" alt="" loading="lazy" onerror="this.parentNode.innerHTML='<span class=\\'initials\\' style=\\'background:${hue(name)}\\'>${escapeHtml(initials(name))}</span>'">`;
+  return `<span class="initials" style="background:${hue(name)};width:100%;height:100%;display:grid;place-items:center">${escapeHtml(initials(name))}</span>`;
+}
+
+/* ============================================================
+   Player
+   ============================================================ */
+let hls=null, curStreams=[], curIdx=0, curChannel=null;
+
+function openPlayer(id){
+  curChannel = S.channels[id];
+  curStreams = (S.streamsByCh[id]||[]).slice().sort(qualityRank);
+  curIdx = 0;
+  if(!curStreams.length){ toast(t("noStream")); return; }
+
+  $("#pName").textContent = curChannel.name;
+  const cats = (curChannel.categories||[]).map(cap).join(", ");
+  $("#pMeta").textContent = [S.countries[S.country]?.name, cats].filter(Boolean).join(" · ");
+  $("#pLogo").innerHTML = logoHTML(id, curChannel.name, 16);
+
+  renderSources();
+  $("#scrim").classList.add("open");
+  document.body.style.overflow="hidden";
+  play(curIdx);
+}
+
+function renderSources(){
+  const el = $("#sources");
+  if(curStreams.length<=1 && !(curStreams[0]&&curStreams[0].label)){ el.innerHTML=""; return; }
+  el.innerHTML = `<div class="sources-label">${t("sources")}</div>
+    <div class="src-row">${curStreams.map((s,i)=>`
+      <button class="src-chip" data-i="${i}" aria-pressed="${i===curIdx}">
+        <span class="q">${escapeHtml(s.quality||"AUTO")}</span>
+        <span class="l">${escapeHtml(s.label || s.title || ("#"+(i+1)))}</span>
+      </button>`).join("")}</div>`;
+  el.querySelectorAll(".src-chip").forEach(b=>b.addEventListener("click",()=>{
+    curIdx = +b.dataset.i; renderSources(); play(curIdx);
+  }));
+}
+
+function play(i){
+  const st = curStreams[i]; if(!st) return;
+  curIdx=i; renderSources();
+  const video = $("#video");
+  destroyHls();
+  video.removeAttribute("src"); video.load?.();
+
+  overlay({spin:true, title:t("loadingStream"), desc:"", actions:[]});
+
+  const url = st.url;
+  const insecure = url.startsWith("http://") && location.protocol==="https:";
+
+  const onFail = ()=> overlay({
+    spin:false,
+    title:t("errTitle"),
+    desc: insecure ? t("httpDesc") : t("errDesc"),
+    actions: playerActions()
+  });
+
+  // success → hide overlay once playing
+  const onPlaying = ()=> overlay(null);
+  video.addEventListener("playing", onPlaying, {once:true});
+
+  if(video.canPlayType("application/vnd.apple.mpegurl")){
+    // native HLS (Safari / iOS)
+    video.src = url;
+    video.addEventListener("error", onFail, {once:true});
+    video.play().catch(()=>{ /* autoplay may need a tap; controls are visible */ });
+  } else if(window.Hls && Hls.isSupported()){
+    hls = new Hls({maxBufferLength:20, manifestLoadingMaxRetry:2, fragLoadingMaxRetry:2});
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, ()=> video.play().catch(()=>{}));
+    hls.on(Hls.Events.ERROR, (_e,data)=>{ if(data.fatal) onFail(); });
+  } else {
+    onFail();
+  }
+}
+
+function playerActions(){
+  const acts = [];
+  if(curStreams.length>1) acts.push({label:t("nextSrc"), primary:true, fn:()=>play((curIdx+1)%curStreams.length)});
+  acts.push({label:t("retry"), fn:()=>play(curIdx)});
+  acts.push({label:t("copyLink"), fn:()=>copy(curStreams[curIdx].url)});
+  return acts;
+}
+
+function overlay(opt){
+  const ov=$("#vOverlay");
+  if(!opt){ ov.classList.remove("show"); return; }
+  $("#vSpin").style.display = opt.spin ? "" : "none";
+  $("#vTitle").textContent = opt.title||"";
+  $("#vDesc").textContent = opt.desc||"";
+  const act=$("#vActions"); act.innerHTML="";
+  (opt.actions||[]).forEach(a=>{
+    const btn=document.createElement("button");
+    btn.textContent=a.label; if(a.primary) btn.className="primary";
+    btn.addEventListener("click", a.fn); act.appendChild(btn);
+  });
+  ov.classList.add("show");
+}
+
+function closePlayer(){
+  destroyHls();
+  const v=$("#video"); v.pause(); v.removeAttribute("src"); v.load?.();
+  $("#scrim").classList.remove("open");
+  document.body.style.overflow="";
+}
+function destroyHls(){ if(hls){ try{hls.destroy();}catch(e){} hls=null; } }
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+function bestStream(streams){ return streams.slice().sort(qualityRank)[0]; }
+function qualityRank(a,b){
+  const r = q => { const m=/(\d{3,4})/.exec(q&&q.quality||""); return m?+m[1]:0; };
+  return r(b)-r(a);
+}
+function initials(name){
+  const w = name.replace(/[^\p{L}\p{N} ]/gu,"").trim().split(/\s+/).filter(Boolean);
+  if(!w.length) return "TV";
+  return (w[0][0] + (w[1]?w[1][0]:(w[0][1]||""))).toUpperCase();
+}
+function hue(name){
+  let h=0; for(let i=0;i<name.length;i++) h=(h*31 + name.charCodeAt(i))>>>0;
+  return `linear-gradient(135deg, hsl(${h%360} 62% 52%), hsl(${(h*7)%360} 60% 44%))`;
+}
+function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+function fmt(n){ return n.toLocaleString(S.lang==="tr"?"tr-TR":"en-US"); }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function stateEmpty(title,desc){
+  return `<div class="state"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(desc)}</p></div>`;
+}
+function debounce(fn,ms){ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn(...a),ms); }; }
+function copy(text){
+  (navigator.clipboard?.writeText(text) || Promise.reject()).then(()=>toast(t("copied")))
+    .catch(()=>{ const i=document.createElement("input"); i.value=text; document.body.appendChild(i); i.select(); try{document.execCommand("copy"); toast(t("copied"));}catch(e){} i.remove(); });
+}
+let toastId;
+function toast(msg){
+  const el=$("#toast"); el.textContent=msg; el.classList.add("show");
+  clearTimeout(toastId); toastId=setTimeout(()=>el.classList.remove("show"),1900);
+}
+</script>
+</body>
+</html>
