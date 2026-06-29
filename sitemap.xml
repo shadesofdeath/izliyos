@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- İzliyos sitemap. Replace REPLACE-WITH-YOUR-DOMAIN with your real domain. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/categories</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/categories?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/categories?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/categories"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/languages</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/languages?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/languages?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/languages"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/news</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/news?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/news?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/news"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/sports</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/sports?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/sports?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/sports"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/music</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/music?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/music?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/music"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/movies</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/movies?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/movies?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/movies"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/series</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/series?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/series?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/series"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/kids</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/kids?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/kids?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/kids"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/entertainment</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/entertainment?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/entertainment?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/entertainment"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/general</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/general?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/general?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/general"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/documentary</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/documentary?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/documentary?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/documentary"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/education</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/education?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/education?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/education"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/lifestyle</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/lifestyle?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/lifestyle?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/lifestyle"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/culture</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/culture?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/culture?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/culture"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/cooking</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/cooking?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/cooking?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/cooking"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/travel</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/travel?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/travel?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/travel"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/science</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/science?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/science?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/science"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/business</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/business?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/business?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/business"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/religious</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/religious?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/religious?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/religious"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/comedy</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/comedy?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/comedy?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/comedy"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/animation</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/animation?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/animation?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/animation"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/auto</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/auto?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/auto?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/auto"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/weather</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/weather?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/weather?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/weather"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/outdoor</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/outdoor?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/outdoor?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/outdoor"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/family</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/family?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/family?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/family"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/relax</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/relax?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/relax?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/relax"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/category/classic</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/category/classic?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/category/classic?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/category/classic"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/TR</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/TR?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/TR?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/TR"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/US</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/US?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/US?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/US"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/GB</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GB?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GB?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GB"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/DE</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/DE?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/DE?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/DE"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/FR</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/FR?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/FR?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/FR"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/AZ</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/AZ?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/AZ?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/AZ"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/NL</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/NL?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/NL?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/NL"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/RU</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RU?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RU?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RU"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/IT</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IT?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IT?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IT"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/ES</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/ES?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/ES?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/ES"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/SA</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SA?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SA?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SA"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/IN</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IN?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IN?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/IN"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/BR</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/BR?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/BR?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/BR"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/PT</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PT?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PT?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PT"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/GR</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GR?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GR?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/GR"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/UA</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/UA?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/UA?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/UA"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/PL</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PL?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PL?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/PL"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/RO</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RO?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RO?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/RO"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/SE</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SE?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SE?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/SE"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://REPLACE-WITH-YOUR-DOMAIN/country/CA</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://REPLACE-WITH-YOUR-DOMAIN/country/CA?hl=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://REPLACE-WITH-YOUR-DOMAIN/country/CA?hl=en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://REPLACE-WITH-YOUR-DOMAIN/country/CA"/>
+    <lastmod>2026-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
