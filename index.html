@@ -35,6 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://iptv-org.github.io">
+<link rel="preconnect" href="https://flagcdn.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236E56F8'/%3E%3Cstop offset='1' stop-color='%23FF4D6D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='1' y='1' width='30' height='30' rx='9' fill='url(%23g)'/%3E%3Cg fill='white'%3E%3Crect x='9' y='13' width='3.4' height='10' rx='1.7'/%3E%3Crect x='14.3' y='9' width='3.4' height='14' rx='1.7'/%3E%3Crect x='19.6' y='16' width='3.4' height='7' rx='1.7'/%3E%3C/g%3E%3C/svg%3E">
 <script type="application/ld+json" id="ld-site"></script>
 <script type="application/ld+json" id="ld-crumb"></script>
@@ -292,6 +293,33 @@ footer .fbrand svg{width:18px;height:18px}
   [data-focus]:focus-visible{box-shadow:0 0 0 4px var(--bg),0 0 0 9px var(--accent)}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+/* flag images (render on every OS, unlike emoji flags) */
+.flag{display:inline-flex;align-items:center;line-height:0}
+.flag-img{height:1em;width:auto;border-radius:.16em;vertical-align:-0.15em;box-shadow:0 0 0 1px var(--hair);background:var(--bg-sunken)}
+.country-card .flag{font-size:34px} .country-card .flag-img{border-radius:5px}
+.pop .flag{font-size:17px} .crumb-here .flag{font-size:20px}
+
+/* language menu */
+.langwrap{position:relative;flex-shrink:0}
+.langmenu{position:absolute;right:0;top:calc(100% + 9px);min-width:188px;background:var(--bg-elev);border:1px solid var(--hair-strong);border-radius:14px;box-shadow:var(--shadow-lg);padding:6px;display:none;z-index:60}
+.langmenu.open{display:block;animation:rise .18s ease}
+.langmenu button{display:flex;align-items:center;gap:11px;width:100%;padding:10px 11px;border-radius:9px;font-size:14px;font-weight:550;text-align:left;color:var(--text)}
+.langmenu button:hover{background:var(--bg-hover)}
+.langmenu button.active{color:var(--accent)}
+.langmenu .flag-img{height:16px;border-radius:3px}
+.langmenu .ck{margin-left:auto;font-weight:700}
+
+/* RTL */
+[dir="rtl"] .card-name{padding-right:0;padding-left:18px}
+[dir="rtl"] .card-live{right:auto;left:12px}
+[dir="rtl"] .fav-btn{right:auto;left:11px}
+[dir="rtl"] .country-card .c-code{right:auto;left:15px}
+[dir="rtl"] .search input{padding:10px 40px 10px 38px}
+[dir="rtl"] .search .s-ic{left:auto;right:14px}
+[dir="rtl"] .search .s-clear{right:auto;left:8px}
+[dir="rtl"] .langmenu{right:auto;left:0}
+[dir="rtl"] .langmenu .ck{margin-left:0;margin-right:auto}
 </style>
 </head>
 <body>
@@ -313,7 +341,10 @@ footer .fbrand svg{width:18px;height:18px}
     </div>
     <div class="bar-spacer"></div>
     <button class="ic-btn" id="favBtn" data-focus title="Favoriler" aria-label="Favoriler"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 17.3-6.2 3.6 1.7-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.5 4.7 1.7 7z"/></svg></button>
-    <button class="ic-btn lang-btn" id="langBtn" data-focus title="Language">TR</button>
+    <div class="langwrap">
+      <button class="ic-btn lang-btn" id="langBtn" data-focus title="Language" aria-haspopup="true" aria-expanded="false">TR</button>
+      <div class="langmenu" id="langMenu" role="menu"></div>
+    </div>
     <button class="ic-btn" id="themeBtn" data-focus title="Tema" aria-label="Tema">
       <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       <svg id="moonIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
@@ -396,6 +427,14 @@ const API="https://iptv-org.github.io/api";
 const LIMIT=200, SHOW_NSFW=false;
 const POPULAR=["TR","US","GB","DE","FR","AZ","NL","RU","IT","ES"];
 const CAT_EMOJI={news:"📰",sports:"⚽",music:"🎵",movies:"🎬",series:"📺",kids:"🧸",entertainment:"🎉",general:"📡",documentary:"🎥",education:"📚",lifestyle:"✨",culture:"🎭",cooking:"🍳",travel:"✈️",science:"🔬",business:"📈",religious:"🕊️",comedy:"😄",animation:"🎨",auto:"🚗",weather:"🌤️",outdoor:"🏔️",family:"👨‍👩‍👧",relax:"🧘",legislative:"🏛️",shop:"🛍️",classic:"🎞️"};
+// UI languages (cc = flag image country code; rtl flips layout)
+const LANGS=[
+ {c:"tr",name:"Türkçe",cc:"tr"},{c:"en",name:"English",cc:"gb"},{c:"de",name:"Deutsch",cc:"de"},
+ {c:"fr",name:"Français",cc:"fr"},{c:"es",name:"Español",cc:"es"},{c:"it",name:"Italiano",cc:"it"},
+ {c:"ru",name:"Русский",cc:"ru"},{c:"ar",name:"العربية",cc:"sa",rtl:true}
+];
+// Turkish category labels (other languages fall back to the API's English names)
+const CAT_I18N={news:{tr:"Haber"},sports:{tr:"Spor"},music:{tr:"Müzik"},movies:{tr:"Filmler"},series:{tr:"Diziler"},kids:{tr:"Çocuk"},entertainment:{tr:"Eğlence"},general:{tr:"Genel"},documentary:{tr:"Belgesel"},education:{tr:"Eğitim"},lifestyle:{tr:"Yaşam"},culture:{tr:"Kültür"},cooking:{tr:"Yemek"},travel:{tr:"Gezi"},science:{tr:"Bilim"},business:{tr:"Ekonomi"},religious:{tr:"Dini"},comedy:{tr:"Komedi"},animation:{tr:"Animasyon"},auto:{tr:"Otomotiv"},weather:{tr:"Hava durumu"},outdoor:{tr:"Doğa"},family:{tr:"Aile"},relax:{tr:"Rahatlama"},legislative:{tr:"Meclis"},shop:{tr:"Alışveriş"},classic:{tr:"Klasik"}};
 
 const T={
  tr:{
@@ -471,6 +510,126 @@ const T={
   seoLangHubT:"Languages — İzliyos", seoLangHubD:"Discover live TV channels by language.",
   seoWatchT:n=>`Watch ${n} live — İzliyos`, seoWatchD:n=>`Watch ${n} live free on İzliyos.`,
   crumbHome:"Home", crumbCats:"Categories", crumbLangs:"Languages"
+ },
+ de:{
+  searchPh:"Sender, Länder, Kategorien suchen…", searchInCountry:"In diesem Land suchen…",
+  loadT:"Senderdaten werden geladen", loadD:"Länder, Sender und Live-Stream-Links werden vorbereitet.",
+  heroKick:"Jetzt live", heroT:"Was läuft?", heroD:"Tausende Live-Sender aus aller Welt. Nach Land, Kategorie oder Sprache stöbern, suchen und sofort ansehen.",
+  sCountries:"Länder", sChannels:"Sender", sStreams:"Streams", popular:"Beliebte Länder", browse:"Nach Land entdecken",
+  categories:"Kategorien", languages:"Sprachen", recents:"Weiterschauen", favorites:"Favoriten", all:"Alle",
+  resCh:"Sender", resCo:"Länder", resCat:"Kategorien", resLang:"Sprachen", emptyT:"Keine Ergebnisse", emptyD:"Nichts entspricht deiner Suche.",
+  chCount:n=>`${n} Sender`, back:"Zurück", allCats:"Alle", countrySub:n=>`${n} Live-Sender`, catSub:n=>`${n} Sender · alle Länder`, langSub:n=>`${n} Sender`,
+  live:"LIVE", noChT:"Keine Sender", noChD:"Versuche eine andere Suche oder einen anderen Filter.",
+  favEmptyT:"Noch keine Favoriten", favEmptyD:"Tippe auf den Stern einer Senderkarte, um ihn zu speichern.",
+  langLoadingT:"Sprachen werden vorbereitet", langLoadingD:"Sprachdaten werden geladen, gleich bereit.",
+  loadMore:"Mehr anzeigen", sources:"Quelle", geo:"Geo-gesperrt", starting:"Stream wird gestartet…", errT:"Stream konnte nicht abgespielt werden",
+  errD:"Die Quelle ist möglicherweise geo-gesperrt oder in einem Format, das der Browser nicht abspielen kann. Versuche eine andere Quelle oder öffne den Link in einem Player.",
+  httpD:"Diese Quelle nutzt eine unsichere (http) Verbindung, die der Browser blockieren kann. Kopiere den Link und öffne ihn in einem Player wie VLC.",
+  retry:"Erneut versuchen", nextSrc:"Nächste Quelle", copy:"Link kopieren", copied:"Link kopiert", prevCh:"Vorheriger", nextCh:"Nächster",
+  added:"Zu Favoriten hinzugefügt", removed:"Aus Favoriten entfernt", pipErr:"Bild-im-Bild wird hier nicht unterstützt", noStream:"Kein Stream gefunden",
+  since:"seit", site:"Webseite", loadErrT:"Daten konnten nicht geladen werden", loadErrD:"Prüfe deine Verbindung und lade neu.",
+  intl:"International", foot:"Alle Streams sind öffentlich verfügbare Links; es werden keine Inhalte auf dieser Seite gehostet.",
+  crumbHome:"Start", crumbCats:"Kategorien", crumbLangs:"Sprachen"
+ },
+ fr:{
+  searchPh:"Rechercher chaînes, pays, catégories…", searchInCountry:"Rechercher dans ce pays…",
+  loadT:"Chargement des données", loadD:"Préparation des pays, chaînes et liens de diffusion en direct.",
+  heroKick:"En direct", heroT:"On regarde quoi ?", heroD:"Des milliers de chaînes en direct du monde entier. Parcourez par pays, catégorie ou langue, recherchez et regardez aussitôt.",
+  sCountries:"Pays", sChannels:"Chaînes", sStreams:"Flux", popular:"Pays populaires", browse:"Explorer par pays",
+  categories:"Catégories", languages:"Langues", recents:"Reprendre", favorites:"Favoris", all:"Tout",
+  resCh:"Chaînes", resCo:"Pays", resCat:"Catégories", resLang:"Langues", emptyT:"Aucun résultat", emptyD:"Rien ne correspond à votre recherche.",
+  chCount:n=>`${n} chaînes`, back:"Retour", allCats:"Tout", countrySub:n=>`${n} chaînes en direct`, catSub:n=>`${n} chaînes · tous les pays`, langSub:n=>`${n} chaînes`,
+  live:"DIRECT", noChT:"Aucune chaîne", noChD:"Essayez une autre recherche ou un autre filtre.",
+  favEmptyT:"Pas encore de favoris", favEmptyD:"Touchez l'étoile d'une chaîne pour l'enregistrer ici.",
+  langLoadingT:"Préparation des langues", langLoadingD:"Les données de langue se chargent, prêtes bientôt.",
+  loadMore:"Voir plus", sources:"Source", geo:"Géo-bloqué", starting:"Démarrage du flux…", errT:"Lecture impossible",
+  errD:"La source est peut-être géo-restreinte ou dans un format que le navigateur ne peut pas lire. Essayez une autre source ou ouvrez le lien dans un lecteur.",
+  httpD:"Cette source utilise un lien non sécurisé (http) que le navigateur peut bloquer. Copiez le lien et ouvrez-le dans un lecteur comme VLC.",
+  retry:"Réessayer", nextSrc:"Source suivante", copy:"Copier le lien", copied:"Lien copié", prevCh:"Précédent", nextCh:"Suivant",
+  added:"Ajouté aux favoris", removed:"Retiré des favoris", pipErr:"Le mode incrusté n'est pas pris en charge ici", noStream:"Aucun flux trouvé",
+  since:"depuis", site:"Site web", loadErrT:"Échec du chargement", loadErrD:"Vérifiez votre connexion et actualisez.",
+  intl:"International", foot:"Tous les flux sont des liens accessibles au public ; aucun contenu n'est hébergé sur ce site.",
+  crumbHome:"Accueil", crumbCats:"Catégories", crumbLangs:"Langues"
+ },
+ es:{
+  searchPh:"Buscar canales, países, categorías…", searchInCountry:"Buscar en este país…",
+  loadT:"Cargando datos", loadD:"Preparando países, canales y enlaces de transmisión en vivo.",
+  heroKick:"En directo", heroT:"¿Qué vemos?", heroD:"Miles de canales en vivo de todo el mundo. Explora por país, categoría o idioma, busca y empieza a ver al instante.",
+  sCountries:"Países", sChannels:"Canales", sStreams:"Transmisiones", popular:"Países populares", browse:"Explorar por país",
+  categories:"Categorías", languages:"Idiomas", recents:"Seguir viendo", favorites:"Favoritos", all:"Todo",
+  resCh:"Canales", resCo:"Países", resCat:"Categorías", resLang:"Idiomas", emptyT:"Sin resultados", emptyD:"Nada coincide con tu búsqueda.",
+  chCount:n=>`${n} canales`, back:"Atrás", allCats:"Todo", countrySub:n=>`${n} canales en vivo`, catSub:n=>`${n} canales · todos los países`, langSub:n=>`${n} canales`,
+  live:"EN VIVO", noChT:"Sin canales", noChD:"Prueba otra búsqueda o filtro.",
+  favEmptyT:"Aún no hay favoritos", favEmptyD:"Toca la estrella de un canal para guardarlo aquí.",
+  langLoadingT:"Preparando idiomas", langLoadingD:"Cargando datos de idioma, listo en breve.",
+  loadMore:"Ver más", sources:"Fuente", geo:"Geobloqueado", starting:"Iniciando transmisión…", errT:"No se pudo reproducir",
+  errD:"La fuente puede estar geo-restringida o en un formato que el navegador no puede reproducir. Prueba otra fuente o abre el enlace en un reproductor.",
+  httpD:"Esta fuente usa un enlace inseguro (http) que el navegador puede bloquear. Copia el enlace y ábrelo en un reproductor como VLC.",
+  retry:"Reintentar", nextSrc:"Siguiente fuente", copy:"Copiar enlace", copied:"Enlace copiado", prevCh:"Anterior", nextCh:"Siguiente",
+  added:"Añadido a favoritos", removed:"Eliminado de favoritos", pipErr:"La imagen en imagen no es compatible aquí", noStream:"No se encontró transmisión",
+  since:"desde", site:"Sitio web", loadErrT:"No se pudieron cargar los datos", loadErrD:"Verifica tu conexión y actualiza.",
+  intl:"Internacional", foot:"Todas las transmisiones son enlaces de acceso público; no se aloja contenido en este sitio.",
+  crumbHome:"Inicio", crumbCats:"Categorías", crumbLangs:"Idiomas"
+ },
+ it:{
+  searchPh:"Cerca canali, paesi, categorie…", searchInCountry:"Cerca in questo paese…",
+  loadT:"Caricamento dati", loadD:"Preparazione di paesi, canali e link in diretta.",
+  heroKick:"Ora in diretta", heroT:"Cosa guardiamo?", heroD:"Migliaia di canali in diretta da tutto il mondo. Sfoglia per paese, categoria o lingua, cerca e guarda subito.",
+  sCountries:"Paesi", sChannels:"Canali", sStreams:"Flussi", popular:"Paesi popolari", browse:"Esplora per paese",
+  categories:"Categorie", languages:"Lingue", recents:"Riprendi", favorites:"Preferiti", all:"Tutti",
+  resCh:"Canali", resCo:"Paesi", resCat:"Categorie", resLang:"Lingue", emptyT:"Nessun risultato", emptyD:"Nessun risultato per la tua ricerca.",
+  chCount:n=>`${n} canali`, back:"Indietro", allCats:"Tutti", countrySub:n=>`${n} canali in diretta`, catSub:n=>`${n} canali · tutti i paesi`, langSub:n=>`${n} canali`,
+  live:"LIVE", noChT:"Nessun canale", noChD:"Prova un'altra ricerca o filtro.",
+  favEmptyT:"Ancora nessun preferito", favEmptyD:"Tocca la stella di un canale per salvarlo qui.",
+  langLoadingT:"Preparazione lingue", langLoadingD:"Caricamento dati lingua, pronto a breve.",
+  loadMore:"Mostra altro", sources:"Fonte", geo:"Geo-bloccato", starting:"Avvio del flusso…", errT:"Impossibile riprodurre",
+  errD:"La fonte potrebbe essere geo-limitata o in un formato non riproducibile dal browser. Prova un'altra fonte o apri il link in un player.",
+  httpD:"Questa fonte usa un link non sicuro (http) che il browser può bloccare. Copia il link e aprilo in un player come VLC.",
+  retry:"Riprova", nextSrc:"Fonte successiva", copy:"Copia link", copied:"Link copiato", prevCh:"Precedente", nextCh:"Successivo",
+  added:"Aggiunto ai preferiti", removed:"Rimosso dai preferiti", pipErr:"Picture-in-picture non supportato qui", noStream:"Nessun flusso trovato",
+  since:"dal", site:"Sito web", loadErrT:"Impossibile caricare i dati", loadErrD:"Controlla la connessione e ricarica.",
+  intl:"Internazionale", foot:"Tutti i flussi sono link pubblicamente disponibili; nessun contenuto è ospitato su questo sito.",
+  crumbHome:"Home", crumbCats:"Categorie", crumbLangs:"Lingue"
+ },
+ ru:{
+  searchPh:"Поиск каналов, стран, категорий…", searchInCountry:"Поиск в этой стране…",
+  loadT:"Загрузка данных", loadD:"Подготовка стран, каналов и ссылок на эфир.",
+  heroKick:"В эфире", heroT:"Что посмотрим?", heroD:"Тысячи прямых каналов со всего мира. Ищите по стране, категории или языку и смотрите сразу.",
+  sCountries:"Страны", sChannels:"Каналы", sStreams:"Потоки", popular:"Популярные страны", browse:"По странам",
+  categories:"Категории", languages:"Языки", recents:"Продолжить", favorites:"Избранное", all:"Все",
+  resCh:"Каналы", resCo:"Страны", resCat:"Категории", resLang:"Языки", emptyT:"Ничего не найдено", emptyD:"По вашему запросу ничего нет.",
+  chCount:n=>`${n} каналов`, back:"Назад", allCats:"Все", countrySub:n=>`${n} прямых каналов`, catSub:n=>`${n} каналов · все страны`, langSub:n=>`${n} каналов`,
+  live:"ЭФИР", noChT:"Нет каналов", noChD:"Измените поиск или фильтр.",
+  favEmptyT:"Пока нет избранного", favEmptyD:"Нажмите звёздочку на карточке канала, чтобы сохранить его.",
+  langLoadingT:"Подготовка языков", langLoadingD:"Данные о языках загружаются, скоро будут готовы.",
+  loadMore:"Показать ещё", sources:"Источник", geo:"Геоблокировка", starting:"Запуск потока…", errT:"Не удалось воспроизвести",
+  errD:"Источник может быть заблокирован по региону или в формате, который браузер не поддерживает. Попробуйте другой источник или откройте ссылку в плеере.",
+  httpD:"Этот источник использует небезопасную (http) ссылку, которую браузер может блокировать. Скопируйте ссылку и откройте её в плеере, например VLC.",
+  retry:"Повторить", nextSrc:"Следующий источник", copy:"Копировать ссылку", copied:"Ссылка скопирована", prevCh:"Предыдущий", nextCh:"Следующий",
+  added:"Добавлено в избранное", removed:"Удалено из избранного", pipErr:"Картинка в картинке здесь не поддерживается", noStream:"Поток не найден",
+  since:"с", site:"Сайт", loadErrT:"Не удалось загрузить данные", loadErrD:"Проверьте соединение и обновите страницу.",
+  intl:"Международные", foot:"Все потоки — общедоступные ссылки; контент не размещается на этом сайте.",
+  crumbHome:"Главная", crumbCats:"Категории", crumbLangs:"Языки"
+ },
+ ar:{
+  searchPh:"ابحث عن القنوات والدول والفئات…", searchInCountry:"ابحث في هذا البلد…",
+  loadT:"جارٍ تحميل البيانات", loadD:"يتم تحضير الدول والقنوات وروابط البث المباشر.",
+  heroKick:"على الهواء", heroT:"ماذا نشاهد؟", heroD:"آلاف القنوات المباشرة من حول العالم. تصفّح حسب الدولة أو الفئة أو اللغة وابدأ المشاهدة فورًا.",
+  sCountries:"الدول", sChannels:"القنوات", sStreams:"البث", popular:"دول شائعة", browse:"تصفّح حسب الدولة",
+  categories:"الفئات", languages:"اللغات", recents:"تابع المشاهدة", favorites:"المفضلة", all:"الكل",
+  resCh:"القنوات", resCo:"الدول", resCat:"الفئات", resLang:"اللغات", emptyT:"لا نتائج", emptyD:"لا شيء يطابق بحثك.",
+  chCount:n=>`${n} قناة`, back:"رجوع", allCats:"الكل", countrySub:n=>`${n} قناة مباشرة`, catSub:n=>`${n} قناة · كل الدول`, langSub:n=>`${n} قناة`,
+  live:"مباشر", noChT:"لا قنوات", noChD:"جرّب بحثًا أو تصفية مختلفة.",
+  favEmptyT:"لا مفضلة بعد", favEmptyD:"اضغط النجمة على بطاقة القناة لحفظها هنا.",
+  langLoadingT:"يتم تحضير اللغات", langLoadingD:"يتم تحميل بيانات اللغات، جاهزة قريبًا.",
+  loadMore:"عرض المزيد", sources:"المصدر", geo:"محظور جغرافيًا", starting:"جارٍ بدء البث…", errT:"تعذّر تشغيل البث",
+  errD:"قد يكون المصدر محظورًا جغرافيًا أو بصيغة لا يدعمها المتصفح. جرّب مصدرًا آخر أو افتح الرابط في مشغّل.",
+  httpD:"يستخدم هذا المصدر رابطًا غير آمن (http) قد يحظره المتصفح. انسخ الرابط وافتحه في مشغّل مثل VLC.",
+  retry:"إعادة المحاولة", nextSrc:"المصدر التالي", copy:"نسخ الرابط", copied:"تم نسخ الرابط", prevCh:"السابق", nextCh:"التالي",
+  added:"أُضيفت إلى المفضلة", removed:"أُزيلت من المفضلة", pipErr:"وضع صورة داخل صورة غير مدعوم هنا", noStream:"لا يوجد بث",
+  since:"منذ", site:"الموقع", loadErrT:"تعذّر تحميل البيانات", loadErrD:"تحقق من اتصالك وأعد التحميل.",
+  intl:"دولي", foot:"جميع عمليات البث روابط متاحة للعموم؛ لا يُستضاف أي محتوى على هذا الموقع.",
+  crumbHome:"الرئيسية", crumbCats:"الفئات", crumbLangs:"اللغات"
  }
 };
 
@@ -486,7 +645,7 @@ const S={
  recents:JSON.parse(localStorage.getItem("izl:recents")||"[]"), lastList:[]
 };
 let pendingWatch=null;
-const t=k=>T[S.lang][k];
+const t=k=>{const v=(T[S.lang]||{})[k];return v!==undefined?v:T.en[k];};
 const $=s=>document.querySelector(s);
 
 /* ============================================================ Boot */
@@ -494,7 +653,8 @@ applyTheme(); applyLang(); initSEO();
 $("#brand").addEventListener("click",e=>{e.preventDefault();go("/");});
 $("#favBtn").addEventListener("click",()=>go("/favorites"));
 $("#themeBtn").addEventListener("click",()=>{S.theme=S.theme==="dark"?"light":"dark";localStorage.setItem("izl:theme",S.theme);applyTheme();});
-$("#langBtn").addEventListener("click",()=>{S.lang=S.lang==="tr"?"en":"tr";localStorage.setItem("izl:lang",S.lang);applyLang();render();updateSEO();});
+$("#langBtn").addEventListener("click",e=>{e.stopPropagation();const m=$("#langMenu");const o=m.classList.toggle("open");$("#langBtn").setAttribute("aria-expanded",o);});
+document.addEventListener("click",e=>{if(!e.target.closest(".langwrap"))closeLangMenu();});
 $("#search").addEventListener("input",debounce(onSearch,170));
 $("#sClear").addEventListener("click",()=>{$("#search").value="";S.q="";S.renderCount=LIMIT;reflectQuery();render();updateSEO();$("#search").focus();});
 $("#pClose").addEventListener("click",closePlayer);
@@ -543,9 +703,19 @@ function dec(s){try{return decodeURIComponent(s||"");}catch(e){return s||"";}}
 function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme);
   $("#sunIcon").classList.toggle("hidden",S.theme==="dark");$("#moonIcon").classList.toggle("hidden",S.theme!=="dark");
   document.querySelector('meta[name=theme-color]').setAttribute("content",S.theme==="dark"?"#0A0A12":"#F6F6FA");}
-function applyLang(){document.documentElement.lang=S.lang;$("#langBtn").textContent=S.lang.toUpperCase();
-  $("#loadT").textContent=t("loadT");$("#loadD").textContent=t("loadD");syncSearchUI();
+function applyLang(){
+  const meta=LANGS.find(l=>l.c===S.lang)||LANGS[0];
+  document.documentElement.lang=S.lang;
+  document.documentElement.dir=meta.rtl?"rtl":"ltr";
+  $("#langBtn").textContent=S.lang.toUpperCase();
+  $("#loadT").textContent=t("loadT");$("#loadD").textContent=t("loadD");
+  buildLangMenu();syncSearchUI();
   $("#footer").innerHTML=`<span class="fbrand"><svg viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="9" fill="url(#lg)"/></svg>İzliyos</span><span>·</span><span>${t("foot")}</span>`;}
+function buildLangMenu(){const m=$("#langMenu");if(!m)return;
+  m.innerHTML=LANGS.map(l=>`<button data-lang="${l.c}" data-focus role="menuitem" class="${l.c===S.lang?"active":""}"><span class="flag"><img class="flag-img" loading="lazy" alt="" src="https://flagcdn.com/${l.cc}.svg" onerror="this.replaceWith(document.createTextNode('🌐'))"></span>${esc(l.name)}${l.c===S.lang?'<span class="ck">✓</span>':''}</button>`).join("");
+  m.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));}
+function closeLangMenu(){const m=$("#langMenu");if(m){m.classList.remove("open");$("#langBtn").setAttribute("aria-expanded","false");}}
+function setLang(code){S.lang=code;localStorage.setItem("izl:lang",code);closeLangMenu();applyLang();render();updateSEO();}
 function syncSearchUI(){const i=$("#search");i.placeholder=S.view==="country"?t("searchInCountry"):t("searchPh");$("#searchBox").classList.toggle("has",!!i.value);}
 
 /* ============================================================ Data */
@@ -638,7 +808,7 @@ function renderHome(){
 
 function searchResults(){
   const q=S.q;
-  const cos=countryList().filter(x=>x.c.name.toLowerCase().includes(q)||x.code.toLowerCase().includes(q));
+  const cos=countryList().filter(x=>countryName(x.code).toLowerCase().includes(q)||x.code.toLowerCase().includes(q));
   const cats=Object.keys(S.byCat).filter(c=>catName(c).toLowerCase().includes(q)||c.includes(q)).sort((a,b)=>S.byCat[b].length-S.byCat[a].length);
   const langs=S.feedsLoaded?Object.keys(S.byLang).filter(c=>langName(c).toLowerCase().includes(q)).sort((a,b)=>S.byLang[b].length-S.byLang[a].length):[];
   let chIds=[];
@@ -660,7 +830,7 @@ function renderCountry(){
   const code=S.country,c=S.countries[code];
   if(!c){$("#content").innerHTML=emptyState("🌐",t("emptyT"),t("emptyD"));return;}
   const all=S.byCountry[code]||[];
-  crumbs([{label:t("crumbHome"),route:"/"},{here:`<span class="flag">${c.flag||"🌐"}</span>${esc(c.name)}`}]);
+  crumbs([{label:t("crumbHome"),route:"/"},{here:`<span class="flag">${flag(code)}</span>${esc(countryName(code))}`}]);
   const cats=["all",...[...(S.catsByCountry[code]||[])].sort()];
   const chips=`<div class="chips">${cats.map(cat=>`<button class="chip" data-cat="${esc(cat)}" data-focus aria-pressed="${S.cat===cat}">${cat==="all"?t("allCats"):catName(cat)}</button>`).join("")}</div>`;
   const q=S.q;
@@ -668,7 +838,7 @@ function renderCountry(){
     if(S.cat!=="all"&&!(ch.categories||[]).includes(S.cat))return false;
     if(q)return ch.name.toLowerCase().includes(q)||(ch.alt_names||[]).some(n=>n.toLowerCase().includes(q));return true;});
   S.lastList=list;
-  const head=heroSmall(`${c.flag||"🌐"} ${esc(code==="_INT"?"INT":code)}`,esc(c.name),t("countrySub")(all.length));
+  const head=heroSmall(`<span class="flag" style="font-size:1.25em">${flag(code)}</span> ${esc(code==="_INT"?"INT":code)}`,esc(countryName(code)),t("countrySub")(all.length));
   $("#content").innerHTML=head+chips+chGridOrEmpty(list);
 }
 
@@ -727,11 +897,11 @@ function crumbs(parts){$("#crumbs").innerHTML=parts.map((p,i)=>{
   if(p.here)return `${i?'<span class="crumb-sep">/</span>':''}<span class="crumb-here">${p.here}</span>`;
   return `<a class="crumb-btn" href="${href(p.route)}" data-route="${p.route}" data-focus>${i?'':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>'}${esc(p.label)}</a>${i<parts.length-1&&!parts[i+1].here?'<span class="crumb-sep">/</span>':''}`;
 }).join("");}
-function countryList(){return Object.keys(S.byCountry).map(code=>countryItem(code)).filter(Boolean).sort((a,b)=>b.n-a.n||a.c.name.localeCompare(b.c.name));}
+function countryList(){return Object.keys(S.byCountry).map(code=>countryItem(code)).filter(Boolean).sort((a,b)=>b.n-a.n||countryName(a.code).localeCompare(countryName(b.code)));}
 function countryItem(code){const c=S.countries[code];if(!c||!S.byCountry[code])return null;return {code,c,n:S.byCountry[code].length};}
 function countryGrid(items){if(!items.length)return emptyState("🌐",t("emptyT"),"");
-  return `<div class="country-grid">${items.map(({code,c,n})=>`<button class="country-card" data-code="${esc(code)}" data-focus><span class="c-code">${esc(code==="_INT"?"INT":code)}</span><span class="flag">${c.flag||"🌐"}</span><span class="c-name">${esc(c.name)}</span><span class="c-count">${t("chCount")(n)}</span></button>`).join("")}</div>`;}
-function popChips(items){return items.map(({code,c,n})=>`<button class="pop" data-code="${esc(code)}" data-focus><span class="flag">${c.flag||"🌐"}</span>${esc(c.name)}<span class="n">${n}</span></button>`).join("");}
+  return `<div class="country-grid">${items.map(({code,c,n})=>`<button class="country-card" data-code="${esc(code)}" data-focus><span class="c-code">${esc(code==="_INT"?"INT":code)}</span><span class="flag">${flag(code)}</span><span class="c-name">${esc(countryName(code))}</span><span class="c-count">${t("chCount")(n)}</span></button>`).join("")}</div>`;}
+function popChips(items){return items.map(({code,c,n})=>`<button class="pop" data-code="${esc(code)}" data-focus><span class="flag">${flag(code)}</span>${esc(countryName(code))}<span class="n">${n}</span></button>`).join("");}
 function miniCard(id){const ch=S.channels[id];return `<button class="mini" data-id="${esc(id)}" data-focus><span class="m-logo">${logoHTML(id,ch.name)}</span><span class="m-name">${esc(ch.name)}</span></button>`;}
 function channelCard(id){const ch=S.channels[id];const st=S.streamsByCh[id]||[];const best=st.slice().sort(qRank)[0];
   const cat=(ch.categories&&ch.categories[0])||"";const geo=st.some(s=>s.label);const on=S.fav.has(id);
@@ -742,8 +912,14 @@ function channelCard(id){const ch=S.channels[id];const st=S.streamsByCh[id]||[];
 function logoHTML(id,name){const url=S.logoByCh[id];
   if(url)return `<img src="${esc(url)}" alt="${esc(name)}" loading="lazy" onerror="this.outerHTML='<span class=\\'initials\\' style=\\'background:${hue(name)}\\'>${esc(initials(name))}</span>'">`;
   return `<span class="initials" style="background:${hue(name)}">${esc(initials(name))}</span>`;}
-function catName(c){return S.catNames[c]||cap(c);}
+function catName(c){const m=CAT_I18N[c];if(m&&m[S.lang])return m[S.lang];return S.catNames[c]||cap(c);}
 function langName(c){return S.langNames[c]||c;}
+const _dn={};
+function countryName(code){if(code==="_INT")return t("intl");if(!code)return "";
+  try{_dn[S.lang]=_dn[S.lang]||new Intl.DisplayNames([S.lang],{type:"region"});const n=_dn[S.lang].of(code);if(n)return n;}catch(e){}
+  return (S.countries[code]&&S.countries[code].name)||code;}
+function flag(code,h){if(!code||code==="_INT")return "🌐";
+  return `<img class="flag-img" style="height:${h||"1em"}" loading="lazy" alt="" src="https://flagcdn.com/${code.toLowerCase()}.svg" onerror="this.replaceWith(document.createTextNode('🌐'))">`;}
 
 /* ============================================================ Favorites / recents */
 function toggleFav(id,fromPlayer){if(!id)return;
@@ -766,7 +942,7 @@ function openPlayer(id,fromRoute){
 function loadChannel(id){
   curChannel=S.channels[id];curStreams=(S.streamsByCh[id]||[]).slice().sort(qRank);curIdx=0;pushRecent(id);
   $("#pName").textContent=curChannel.name;
-  $("#pMeta").textContent=[S.countries[curChannel.country]?.name,(curChannel.categories||[]).map(catName).join(", ")].filter(Boolean).join(" · ");
+  $("#pMeta").textContent=[countryName(curChannel.country),(curChannel.categories||[]).map(catName).join(", ")].filter(Boolean).join(" · ");
   $("#pLogo").innerHTML=logoHTML(id,curChannel.name);$("#pFav").classList.toggle("on",S.fav.has(id));
   renderInfo(id);renderZap();renderSources();
   if(!curStreams.length){overlay({emoji:"📭",title:t("noStream"),actions:[]});return;}
@@ -829,7 +1005,7 @@ function updateSEO(){
   let title=t("seoHomeT"),desc=t("seoHomeD"),crumb=[{n:"İzliyos",u:absURL("/")}];
   const seg=normPath().split("/").filter(Boolean);
   if(seg[0]==="watch"&&S.channels[dec(seg[1])]){const ch=S.channels[dec(seg[1])];title=t("seoWatchT")(ch.name);desc=t("seoWatchD")(ch.name);}
-  else if(S.view==="country"&&S.countries[S.country]){const c=S.countries[S.country];title=t("seoCountryT")(c.name);desc=t("seoCountryD")(c.name,(S.byCountry[S.country]||[]).length);crumb.push({n:c.name,u:absURL("/country/"+S.country)});}
+  else if(S.view==="country"&&S.countries[S.country]){const nm=countryName(S.country);title=t("seoCountryT")(nm);desc=t("seoCountryD")(nm,(S.byCountry[S.country]||[]).length);crumb.push({n:nm,u:absURL("/country/"+S.country)});}
   else if(S.view==="category"){const n=catName(S.activeCat);title=t("seoCatT")(n);desc=t("seoCatD")(n);crumb.push({n:t("crumbCats"),u:absURL("/categories")},{n,u:absURL("/category/"+S.activeCat)});}
   else if(S.view==="language"){const n=langName(S.activeLang);title=t("seoLangT")(n);desc=t("seoLangD")(n);crumb.push({n:t("crumbLangs"),u:absURL("/languages")},{n,u:absURL("/language/"+S.activeLang)});}
   else if(S.view==="cathub"){title=t("seoCatHubT");desc=t("seoCatHubD");crumb.push({n:t("crumbCats"),u:absURL("/categories")});}
@@ -854,7 +1030,7 @@ function updateSEO(){
 /* ============================================================ Spatial nav (TV) */
 function setupSpatialNav(){document.addEventListener("keydown",e=>{
   const open=$("#scrim").classList.contains("open");
-  if(e.key==="Escape"){if(open)closePlayer();return;}
+  if(e.key==="Escape"){closeLangMenu();if(open)closePlayer();return;}
   if(e.key==="/"&&!isTyping()){e.preventDefault();$("#search").focus();return;}
   if(e.key==="Enter"&&!isTyping()){const a=document.activeElement;if(a&&a.hasAttribute("data-focus")&&a.tagName!=="BUTTON"&&a.tagName!=="A"){e.preventDefault();a.click();}return;}
   const dirs={ArrowUp:"up",ArrowDown:"down",ArrowLeft:"left",ArrowRight:"right"};if(!(e.key in dirs))return;
